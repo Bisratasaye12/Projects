@@ -1,0 +1,83 @@
+* boxsizing {
+    margin: 0;
+    padding: 0;
+}
+.output-bar{
+    height: 70px;
+    width: 320px;
+    background-color: black;
+    font-family: sans-serif;
+    font-size: 28px ;
+    color:  white;
+    display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    justify-content: flex-end;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.button-container{
+    height: 400px;
+    width: 320px;
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+}
+
+.first-portion{
+    height: 400px;
+    width: 240px;
+    background-color: lightgray;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+}
+.operators{
+    height: 400px;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+}
+button{
+    height:80px;
+    width: 80px;
+    outline: none;
+    font-size: 14px;
+    font-family: arial;
+}
+
+.first-portion button{
+    background-color: lightgray;
+    height: 80px;
+   
+}
+.first-portion button:active{
+    background-color: rgb(134, 133, 133);
+}
+.first-portion button:hover{
+    background-color: rgb(235, 228, 228);
+    cursor: pointer;
+}
+.operators button {
+    background-color:rgba(255, 166, 0, 0.925);
+    color: white;
+}
+
+.operators button:active{
+    background-color: rgba(185, 123, 6, 0.925);
+}
+
+.operators button:hover{
+    background-color: rgb(253, 211, 22);
+    cursor: pointer;
+}
+
+.clear{
+    width: 160px;
+}
+.zero{
+    width: 240px
+}
