@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Users</title>
+    <link rel="stylesheet" href="../styles/nav_style.css" />
+    
+    <style>
+        :root {
+            --border-color: #e2e8f0;
+            --bg-color: #f8fafc;
+            --error-color: #dc2626;
+            --success-color: #16a34a;
+        }
+ 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .verify-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .verify-header h1 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .selected {
+            background-color: #fef9c3 !important;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .custom-checkbox.checked::after {
+            content: "✓";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary-color);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .alert-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: var(--error-color);
+        }
+
+        .alert-success {
+            background-color: #dcfce7;
+            border: 1px solid #86efac;
+            color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 0;
+            }
+            
+            .user-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+    <script>
+        function inputChanged(event) {
+            const row = event.target.closest('tr');
+            row.classList.toggle('selected', event.target.checked);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('checkBtn').addEventListener('click', (e) => {
+                const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                if (!checked) {
+                    alert("You must check at least one checkbox.");
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="container">
+        <div class="verify-header">
+            <h1>Verify Users</h1>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert-message alert-error" th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" class="alert-message alert-success" th:text="${successMessage}"></div>
+
+        <div th:if="${userList.size() != 0}">
+            <form autocomplete="off" action="#" th:action="@{/admin/verify}" method="post">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Verify</th>
+                            <th>Email</th>
+                            <th>User Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user: ${userList}">
+                            <td>
+                                <div class="checkbox-container">
+                                    <input type="checkbox" 
+                                           onchange="inputChanged(event)" 
+                                           name="checkedRows" 
+                                           th:value="${user.email}"
+                                           class="custom-checkbox">
+                                </div>
+                            </td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.firstName + ' ' + user.lastName}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="submit-btn" id="checkBtn">Verify Selected Users</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

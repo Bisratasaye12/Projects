@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Summary</title>
+    <link rel="stylesheet" href="../styles/nav_style.css" />
+    
+    <style>
+        :root {
+            --success-color: #16a34a;
+            --border-color: #e2e8f0;
+            --bg-color: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .transaction-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-alert {
+            background-color: var(--success-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transaction-table thead tr {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .transaction-table tfoot tr {
+            background-color: var(--bg-color);
+            font-weight: 600;
+        }
+
+        .transaction-caption {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .thank-you {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .transaction-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .transaction-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="transaction-container">
+        <div class="success-alert">
+            Congratulations, your transaction was successfully completed!
+        </div>
+
+        <table class="transaction-table">
+            <caption class="transaction-caption" th:text="'Transaction ID: ' + ${transactionSellId}"></caption>
+            <thead>
+                <tr>
+                    <th>Stock Name</th>
+                    <th>Quantity</th>
+                    <th>Price per Stock</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="trade: ${tradeSellList}">
+                    <td th:text="${trade.stock.name}"></td>
+                    <td th:text="${trade.quantity}"></td>
+                    <td th:text="${trade.individualPrice}"></td>
+                    <td th:text="${trade.quantity * trade.individualPrice}"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Service Charge</td>
+                    <td th:text="${serviceSellTax}"></td>
+                </tr>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td th:text="${totalSellPrice}"></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="thank-you">
+            <p><strong>Thank you for your business!</strong></p>
+        </div>
+    </div>
+</body>
+</html>

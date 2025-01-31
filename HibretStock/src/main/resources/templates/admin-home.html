@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../styles/nav_style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+
+        .jumbotron {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            margin-top: 50px;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 60px;
+        }
+
+        .container-fluid {
+            padding: 0 20px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .column {
+            width: 30%;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+            max-height: 150px;
+            object-fit: contain;
+            width: 100%;
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .card-text p {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .btn-info {
+            background-color: #3498db;
+            border-color: #3498db;
+            color: #fff;
+            font-weight: 500;
+            border-radius: 30px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-info:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+	    /* Button styles */
+	    .btn-info {
+	        background-color: #3498db;
+	        border-color: #3498db;
+	        color: #fff;
+	        font-weight: 500;
+	        border-radius: 30px;
+	        transition: background-color 0.3s;
+	    }
+	
+	    .btn-info:hover {
+	        background-color: #2980b9;
+	        border-color: #2980b9;
+	    }
+        
+        @media (max-width: 768px) {
+            .column {
+                width: 48%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .column {
+                width: 100%;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            .card-text p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+	<div th:replace="/navbar :: header"> </div>
+   	<br></br>
+   	<br></br>
+   	<br></br>
+    <div class="container">
+        <div class="jumbotron">
+            <h3>Top 3 Currencies</h3>
+            <div class="row">
+                <div class="column" th:each="element : ${currencies}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${element.key}"></h4>
+                            <p th:text="${element.value}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="jumbotron">
+            <h3>Stock Activity - Top Trending Stocks</h3>
+            <div class="row">
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[0]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[0].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[0].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[0].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[0].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[0].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[1]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[1].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[1].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[1].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[1].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[1].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[2]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[2].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[2].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[2].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[2].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[2].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <br></br>
+            
+            <div class="row">
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[3]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[3].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[3].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[3].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[3].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[3].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[4]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[4].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[4].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[4].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[4].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[4].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[5]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[5].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[5].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[5].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[5].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[5].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <br></br>
+            
+            <div class="row">
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[6]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[6].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[6].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[6].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[6].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[6].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[7]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[7].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[7].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[7].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[7].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[7].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[8]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[8].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[8].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[8].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[8].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[8].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <br><br>
+            
+            <div class="row">
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[9]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[9].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[9].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[9].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[9].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[9].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[10]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[10].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[10].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[10].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[10].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[10].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{${logos[11]}}" alt="Stock Image">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${stocks[11].name}"></h4>
+                            <p class="card-text">Price: <span th:text="${stocks[11].price}"></span></p>
+                            <p class="card-text">
+                                Percent Change:
+                                <span th:style="${stocks[11].percentageChange.charAt(0) == '-' ? 'color: red;' : 'color: green;'}"
+                                    th:text="${stocks[11].percentageChange}"></span>
+                            </p>
+                            <form>
+                                <input type="submit" class="btn btn-info"
+                                    th:attr="onclick='javascript:sayHello(\''+${stocks[11].ticker}+'\', event)'"
+                                    value="Add to Watchlist">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.5/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

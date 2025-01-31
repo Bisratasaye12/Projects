@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Bank Account Management" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="../styles/nav_style.css" />
+    <title>Manage Accounts</title>
+
+    <style>
+        :root {
+            --border-color: #e2e8f0;
+            --bg-color: #f8fafc;
+            --error-color: #dc2626;
+            --success-color: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .account-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .account-header h1 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .form-label {
+            width: 150px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-select {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .alert-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: var(--error-color);
+        }
+
+        .alert-success {
+            background-color: #dcfce7;
+            border: 1px solid #86efac;
+            color: var(--success-color);
+        }
+
+        @media (max-width: 768px) {
+            .account-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .form-label {
+                width: 100%;
+            }
+
+            .form-input,
+            .form-select {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        function validateAccountNumber(input) {
+            const accountNumber = input.value;
+            const errorElement = document.getElementById('account-error');
+            
+            if (isNaN(accountNumber)) {
+                errorElement.textContent = "Account number must contain only numbers";
+                input.classList.add('input-error');
+                return false;
+            }
+            
+            errorElement.textContent = "";
+            input.classList.remove('input-error');
+            return true;
+        }
+
+        function checkInp(event) {
+            const accountInput = document.querySelector('[name="accountNumber"]');
+            if (!validateAccountNumber(accountInput)) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="account-container">
+        <div class="account-header">
+            <h1>Manage Bank Accounts</h1>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert-message alert-error" th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" class="alert-message alert-success" th:text="${successMessage}"></div>
+
+        <form name="myForm" autocomplete="off" action="#" onsubmit="return checkInp(event)" 
+              th:action="@{/update/bankAccount}" th:object="${userBank}" method="post">
+            <div class="form-group">
+                <label class="form-label">Account Number</label>
+                <div style="flex: 1;">
+                    <input type="text" class="form-input" th:field="*{accountNumber}" 
+                           required pattern="\d{10,20}" 
+                           oninput="validateAccountNumber(this)">
+                    <div class="form-help">Please enter 10-20 digit account number</div>
+                    <div id="account-error" class="form-help" style="color: var(--error-color);"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Bank Name</label>
+                <input type="text" class="form-input" th:field="*{bankName}" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Account Type</label>
+                <select class="form-select" th:field="*{accountType}" required>
+                    <option value="Savings">Savings Account</option>
+                    <option value="Current">Foreign Currency Account (FCY)</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="justify-content: flex-end; margin-top: 2rem;">
+                <button type="submit" class="submit-btn">Add Account</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

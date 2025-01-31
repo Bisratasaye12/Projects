@@ -1,0 +1,139 @@
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --text-light: #ecf0f1;
+  --success-color: #27ae60;
+  --danger-color: #e74c3c;
+  --hover-color: #2980b9;
+}
+
+body{
+	font-family: Arial, sans-serif;
+}
+
+.main-header {
+  background-color: var(--primary-color);
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.custom-nav {
+  max-width: 100%;
+  margin: 0;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.logo {
+  color: var(--text-light);
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: var(--text-light);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--hover-color);
+}
+
+.verification, .greeting-admin {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.greeting-admin {
+	background-color: var(--hover-color);
+  	color: white;
+}
+
+.verified {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.unverified {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-toggle {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+.dropdown-link {
+  color: var(--primary-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-link:hover {
+  background-color: #f5f5f5;
+}
+
+.profile-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.user-controls, .user-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.main-links {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .main-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

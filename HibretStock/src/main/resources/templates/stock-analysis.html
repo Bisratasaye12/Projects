@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis</title>
+    <link rel="stylesheet" href="../styles/nav_style.css" />
+    
+    <style>
+        :root {
+            --border-color: #e2e8f0;
+            --bg-color: #f8fafc;
+            --error-color: #dc2626;
+            --success-color: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .analysis-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .analysis-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .analysis-header h1 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        .analysis-table th,
+        .analysis-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .analysis-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .analysis-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .analysis-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .empty-state {
+            padding: 1.5rem;
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border-radius: 8px;
+            border: 1px solid #fca5a5;
+            text-align: center;
+        }
+
+        .positive-change {
+            color: var(--success-color);
+        }
+
+        .negative-change {
+            color: var(--error-color);
+        }
+
+        @media (max-width: 768px) {
+            .analysis-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .analysis-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="analysis-container">
+        <div class="analysis-header">
+            <h1>Stock Analysis</h1>
+        </div>
+
+        <div th:if="${analysisMap.get('Sell') == null}" class="empty-state">
+            Empty Portfolio! Please start trading to get portfolio analysis.
+        </div>
+
+        <div th:unless="${analysisMap.get('Sell') == null}">
+            <!-- Sell Table -->
+            <div th:if="${analysisMap.get('Sell').size() != 0}">
+                <table class="analysis-table">
+                    <caption>Stocks to Sell</caption>
+                    <thead>
+                        <tr>
+                            <th>Analysis</th>
+                            <th>Stock Name</th>
+                            <th>Percent Change</th>
+                            <th>Selling Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="stock: ${analysisMap.get('Sell')}">
+                            <td><img th:src="@{/sell.png}" alt="Sell" class="analysis-icon"></td>
+                            <td th:text="${stock.name}"></td>
+                            <td th:class="${stock.percentageChange.charAt(0)} == '-' ? 'negative-change' : 'positive-change'"
+                                th:text="${stock.percentageChange}"></td>
+                            <td th:text="${stock.dayHigh}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br><br>
+
+            <!-- Buy Table -->
+            <div th:if="${analysisMap.get('Buy').size() != 0}">
+                <table class="analysis-table">
+                    <caption>Stocks to Buy</caption>
+                    <thead>
+                        <tr>
+                            <th>Analysis</th>
+                            <th>Stock Name</th>
+                            <th>Percent Change</th>
+                            <th>Buying Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="stock: ${analysisMap.get('Buy')}">
+                            <td><img th:src="@{/buy.png}" alt="Buy" class="analysis-icon"></td>
+                            <td th:text="${stock.name}"></td>
+                            <td th:class="${stock.percentageChange.charAt(0)} == '-' ? 'negative-change' : 'positive-change'"
+                                th:text="${stock.percentageChange}"></td>
+                            <td th:text="${stock.dayHigh}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br><br>
+
+            <!-- Hold Table -->
+            <div th:if="${analysisMap.get('Hold').size() != 0}">
+                <table class="analysis-table">
+                    <caption>Stocks to Hold</caption>
+                    <thead>
+                        <tr>
+                            <th>Analysis</th>
+                            <th>Stock Name</th>
+                            <th>Percent Change</th>
+                            <th>Selling Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="stock: ${analysisMap.get('Hold')}">
+                            <td><img th:src="@{/hold.png}" alt="Hold" class="analysis-icon"></td>
+                            <td th:text="${stock.name}"></td>
+                            <td th:class="${stock.percentageChange.charAt(0)} == '-' ? 'negative-change' : 'positive-change'"
+                                th:text="${stock.percentageChange}"></td>
+                            <td th:text="${stock.dayHigh}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

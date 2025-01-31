@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../styles/nav_style.css">
+    <title>Stock Trading</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --accent-color: #2563eb;
+            --light-bg: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--light-bg);
+        }
+
+        .hero-section {
+            padding: 6rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #0f172a);
+            color: var(--text-light);
+            text-align: center;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.05em;
+        }
+
+        /* Feature List Styling */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 2.5rem 0;
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping of items */
+            justify-content: center; /* Center items horizontally */
+            gap: 1.5rem; /* Add space between items */
+        }
+
+        .feature-list li {
+            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex: 1 1 calc(30% - 3rem); /* Limit the maximum width of each item */
+            box-sizing: border-box; /* Ensure padding is included in the width */
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        /* Call-to-Action Button Styling */
+        .cta-container {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.25rem 3rem;
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background-color: #1d4ed8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero-section {
+                padding: 4rem 1rem;
+                min-height: auto;
+            }
+
+            .feature-list li {
+                flex: 1 1 calc(45% - 1.5rem); /* Adjust for smaller screens */
+                max-width: calc(45% - 1.5rem);
+                font-size: 1rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .feature-list li {
+                flex: 1 1 100%; /* Stack items vertically on very small screens */
+                max-width: 100%;
+                font-size: 0.9rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Ethiopia's Premier Digital Trading Platform</h1>
+            <ul class="feature-list">
+                <li>Instant Account Creation & Verification</li>
+                <li>Secure Bank Account Integration</li>
+                <li>Real-time Stock Watchlist Management</li>
+                <li>Seamless Trading Experience</li>
+                <!-- <li>Advanced Portfolio Analytics</li> -->
+            </ul>
+            <div class="cta-container">
+                <a href="/register" class="cta-button">Start Trading Today</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

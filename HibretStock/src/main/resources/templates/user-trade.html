@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Stocks</title>
+    <link rel="stylesheet" href="../styles/nav_style.css" />
+    
+    <style>
+        :root {
+            --border-color: #e2e8f0;
+            --bg-color: #f8fafc;
+            --error-color: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+        }
+
+        .trade-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .trade-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .trade-header h1 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .trade-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .trade-table th,
+        .trade-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .trade-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 0.5rem;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .custom-checkbox.checked::after {
+            content: "✓";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary-color);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .trade-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .trade-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.parentNode.querySelector('.quantity-input');
+                    let value = parseInt(input.value) || 0;
+                    
+                    if (this.classList.contains('minus')) {
+                        value = Math.max(1, value - 1);
+                    } else {
+                        value += 1;
+                    }
+                    
+                    input.value = value;
+                });
+            });
+
+            document.getElementById('checkBtn').addEventListener('click', function(e) {
+                if (document.getElementById('sell').value) {
+                    const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                    if (!checked) {
+                        alert("You must check at least one checkbox.");
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function(e) {
+                    const row = e.target.closest('tr');
+                    row.classList.toggle('selected', this.checked);
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div th:replace="/navbar :: header"></div>
+
+    <div class="trade-container">
+        <div class="trade-header">
+            <h1>Stock Trading</h1>
+        </div>
+
+        <form autocomplete="off" name="form" action="#" th:action="@{/trade/transaction}" method="post">
+            <!-- Buy Table -->
+            <table class="trade-table">
+                <caption>Buy Stocks</caption>
+                <thead>
+                    <tr>
+                        <th>Stock Name</th>
+                        <th>Symbol</th>
+                        <th>Current Price</th>
+                        <th>Change</th>
+                        <th>Volume</th>
+                        <th>Buy Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="stock: ${stockList.get('Buy')}">
+                        <td th:text="${stock.name}"></td>
+                        <td th:text="${stock.ticker}"></td>
+                        <td th:text="${stock.price}"></td>
+                        <td th:text="${stock.dayChange}"></td>
+                        <td th:text="${stock.volume}"></td>
+                        <td th:text="${stock.dayLow}"></td>
+                        <td>
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn minus">-</button>
+                                <input type="number" class="quantity-input" name="quantity" value="1" min="1">
+                                <button type="button" class="quantity-btn plus">+</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Sell Table -->
+            <table class="trade-table">
+                <caption>Sell Stocks</caption>
+                <thead>
+                    <tr>
+                        <th>Sell</th>
+                        <th>Stock Name</th>
+                        <th>Symbol</th>
+                        <th>Current Price</th>
+                        <th>Change</th>
+                        <th>Type</th>
+                        <th>Sell Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="stock,iterStat: ${stockList.get('Sell')}">
+                        <input type="hidden" id="sell" name="sell" th:value="${stockList.get('Sell').size()}">
+                        <td>
+                            <div class="checkbox-container">
+                                <input type="checkbox" 
+                                       name="checkedRows" 
+                                       th:value="${stock.ticker + '!' + stockList.get('Amount').get(iterStat.index)}"
+                                       class="custom-checkbox">
+                            </div>
+                        </td>
+                        <td th:text="${stock.name}"></td>
+                        <td th:text="${stock.ticker}"></td>
+                        <td th:text="${stock.price}"></td>
+                        <td th:text="${stock.dayChange}"></td>
+                        <td th:text="${stock.volume}"></td>
+                        <td th:text="${stock.dayHigh}"></td>
+                        <td th:text="${stockList.get('Amount').get(iterStat.index)}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="submit" class="submit-btn" id="checkBtn">Execute Trades</button>
+        </form>
+    </div>
+</body>
+</html>

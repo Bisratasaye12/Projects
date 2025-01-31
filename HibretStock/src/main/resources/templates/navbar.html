@@ -1,0 +1,62 @@
+<div th:fragment="header">
+  <header class="main-header">
+    <nav class="custom-nav">
+      <div class="nav-container">
+        <!-- Left Section -->
+        <div class="nav-brand">
+          <a href="#" class="logo">Hibret Stock Trader</a>
+        </div>
+
+        <!-- Right Section -->
+        <div class="nav-section">
+          <div th:if="${session.user == null}" class="auth-links">
+            <a th:href="@{/}" class="nav-link">Home</a>
+            <a th:href="@{/register}" class="nav-link"><span class="icon">👤</span> Sign Up</a>
+            <a th:href="@{/login}" class="nav-link"><span class="icon">🔑</span> Login</a>
+          </div>
+
+          <div th:unless="${session.user == null}">
+            <div th:if="${session.isAdmin != null && session.isAdmin == 'Yes'}" class="main-links">
+              <a th:href="@{/}" class="nav-link">Home</a>
+              <a th:href="@{/admin/modify}" class="nav-link">Modify Service Charge</a>
+              <a th:href="@{/admin/verify}" class="nav-link">Verify Users</a>
+              <div class="user-menu">
+                <span class="greeting-admin">Hi Admin</span>
+                <a th:href="@{/logout}" class="nav-link">Sign out</a>
+              </div>
+            </div>
+
+            <div th:unless="${session.isAdmin != null && session.isAdmin == 'Yes'}" class="user-nav">
+              <div class="main-links">
+                <a th:href="@{/}" class="nav-link">Home</a>
+                <a th:href="@{/watchlist}" class="nav-link">Watchlist</a>
+                <a th:href="@{/dashboard}" class="nav-link">Portfolio</a>
+                <a th:href="@{/statement}" class="nav-link">Account Statement</a>
+                <a th:href="@{/analysis}" class="nav-link">Stock Analysis</a>
+              </div>
+
+              <div class="user-controls">
+                <div th:if="${session.verified == 'yes'}" class="verification verified">
+                  Verified ✔
+                </div>
+                <div th:if="${session.verified == 'no'}" class="verification unverified">
+                  Unverified ✖
+                </div>
+                
+                <div class="profile-dropdown">
+                  <button class="profile-toggle">
+                    Hi <span th:text="${session.user}"></span> ▼
+                  </button>
+                  <div class="dropdown-content">
+                    <a th:href="@{/update/profile}" class="dropdown-link">Update Profile</a>
+                    <a th:href="@{/update/bankAccount}" class="dropdown-link">Manage Bank Account</a>
+                  </div>
+                </div>
+                <a th:href="@{/logout}" class="nav-link">Sign out</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
